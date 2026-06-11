@@ -6,7 +6,7 @@
 <title>Secluded Cabin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Dancing+Script:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <style>
 /* ── Reset ──────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -75,6 +75,7 @@ html, body {
   flex: 1;
   justify-content: center;
   width: 100%;
+  /* subtitle is absolutely positioned within the screen, not this flex container */
 }
 
 /* Breathing circle — JS drives transform: scale() */
@@ -120,15 +121,20 @@ html, body {
 }
 
 #trail-subtitle {
-  font-family: var(--ff-quill);
-  font-style: italic;
-  font-size: 1.1rem;
-  color: rgba(223,202,167,0.7);
+  font-family: 'Dancing Script', cursive;
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: rgba(223,202,167,0.82);
   text-align: center;
-  max-width: 380px;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.8);
+  max-width: 420px;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.98), 0 0 28px rgba(0,0,0,0.9);
   padding: 0 24px;
-  margin-top: 44px;
+  margin-top: 0;
+  position: absolute;
+  bottom: 28%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
   opacity: 0;
   animation: fadeInOnce 5s forwards 1.5s;
 }
@@ -287,9 +293,10 @@ html, body {
   position: absolute;
   bottom: 21%;
   right: 13%;
-  width: 120px; height: 170px;
+  width: 120px; height: 160px;
   pointer-events: none; z-index: 3;
-  opacity: 0.88;
+  opacity: 0.92;
+  overflow: hidden;
 }
 #ember-glow {
   position: absolute;
@@ -813,6 +820,7 @@ html, body {
   margin-bottom: 14px;
 }
 .j-entry-date  { font-size: 0.75rem; opacity: 0.52; margin-bottom: 3px; }
+.j-entry-session-title { font-family: 'Dancing Script', cursive; font-size: 1.15rem; color: #3d2008; margin-bottom: 2px; }
 .j-entry-potion { font-family: var(--ff-quill); font-style: italic; font-size: 1.1rem; color: #7a4209; margin-bottom: 3px; font-weight: 600; }
 .j-entry-ings  { font-size: 0.82rem; opacity: 0.62; margin-bottom: 2px; }
 .j-entry-ctx   { font-style: italic; opacity: 0.75; }
@@ -835,6 +843,17 @@ html, body {
   font-size: 1.15rem; color: #5a3511;
   margin-bottom: 16px; min-height: 24px;
 }
+.j-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed rgba(40,25,12,0.30);
+  font-family: var(--ff-quill); font-style: italic; font-size: 1.05rem;
+  color: #1c120c; padding: 6px 2px; outline: none;
+  margin-bottom: 12px;
+  user-select: text; pointer-events: all;
+}
+.j-input::placeholder { color: rgba(28,18,12,0.28); font-style: italic; }
 .j-textarea {
   width: 100%; flex: 1;
   background: transparent;
@@ -932,12 +951,34 @@ body { animation: appBoot 1.8s ease; }
 @keyframes appBoot { from { opacity: 0; } to { opacity: 1; } }
 
 @media (max-width: 480px) {
+  /* Trail screen — optimise portrait crop; swap background-image URL here for a dedicated mobile image */
+  #screen-trail { background-position: center top; }
+  #breath-circle { width: 130px; height: 130px; }
+  #trail-subtitle { font-size: 1.25rem; bottom: 24%; }
+  .trail-controls { padding-bottom: 5vh; gap: 14px; }
+  .duration-selector { gap: 10px; }
+  /* Cabin controls */
+  .cabin-top-bar { padding: 10px 12px; }
+  .ghost-btn { font-size: 0.72rem; padding: 6px 10px; }
+  /* Fire canvas — scale down for smaller hearths on mobile */
+  #fire-canvas { width: 90px; height: 126px; bottom: 20%; right: 11%; }
+  #ember-glow  { width: 136px; height: 40px; bottom: 17%; right: 10%; }
+  /* Instruments */
   .instrument-bar { bottom: 10px; gap: 2px; }
-  .instr-btn { padding: 7px 9px; font-size: 0.72rem; }
+  .instr-btn { padding: 7px 14px; font-size: 0.72rem; }
+  /* Journal */
   .j-page { padding: 22px 18px; }
   .j-title { font-size: 1.2rem; }
-  .journal-book-wrap { flex-direction: column; max-height: 88vh; }
-  .j-page-left { border-right: none; border-bottom: 2px solid rgba(0,0,0,0.16); max-height: 40vh; }
+  .journal-book-wrap { flex-direction: column; max-height: 90vh; overflow-y: auto; }
+  .j-page-left { border-right: none; border-bottom: 2px solid rgba(0,0,0,0.16); max-height: 38vh; overflow-y: auto; }
+  .j-page-right { overflow-y: auto; }
+  /* Scroll overlay */
+  .scroll-body { max-height: 82vh; }
+}
+@media (max-width: 380px) {
+  #breath-circle { width: 108px; height: 108px; }
+  #trail-subtitle { font-size: 1.1rem; }
+  .ghost-btn { font-size: 0.66rem; padding: 5px 8px; }
 }
 </style>
 </head>
@@ -947,8 +988,8 @@ body { animation: appBoot 1.8s ease; }
 <div id="screen-trail" class="screen active">
   <div class="trail-content">
     <div id="breath-circle"><span id="breath-word">Breathe</span></div>
-    <p class="trail-subtitle" id="trail-sub">Follow the trail. The cabin is near.</p>
   </div>
+  <p class="trail-subtitle" id="trail-sub">Follow the trail. The cabin is near.</p>
   <div class="trail-controls">
     <div class="duration-selector">
       <button class="dur-btn" data-sec="30">30 s</button>
@@ -997,11 +1038,9 @@ body { animation: appBoot 1.8s ease; }
     <!-- Ritual status -->
     <div id="ritual-status">open the scroll to begin</div>
 
-    <!-- Instruments -->
+    <!-- Bell chime -->
     <div class="instrument-bar">
-      <button class="instr-btn" data-inst="bowl">singing bowl</button>
-      <button class="instr-btn" data-inst="koshi">koshi chimes</button>
-      <button class="instr-btn" data-inst="tingsha">tingsha</button>
+      <button class="instr-btn" data-inst="bell">ring the chime</button>
     </div>
 
   </div>
@@ -1049,10 +1088,12 @@ body { animation: appBoot 1.8s ease; }
     <div class="j-page j-page-right">
       <div class="j-content">
         <div class="j-title">this session</div>
+        <label class="j-label">session title</label>
+        <input class="j-input" id="j-entry-title" type="text" autocomplete="off" spellcheck="false" placeholder="name this moment…">
         <label class="j-label">active formula</label>
         <div id="j-formula" class="j-formula-display">—</div>
         <label class="j-label">what calls you here today?</label>
-        <textarea class="j-textarea" id="j-context" placeholder="a difficult meeting, a parenting moment, a challenge ahead…" rows="5"></textarea>
+        <textarea class="j-textarea" id="j-context" placeholder="a difficult meeting, a parenting moment, a challenge ahead…" rows="4"></textarea>
         <button class="j-save-btn" id="j-save-btn">seal this reflection</button>
         <button class="j-close" id="j-close-btn">close the journal</button>
       </div>
@@ -1305,16 +1346,19 @@ function spawnFire(scatter) {
   if (!canvas) return;
   const r = canvas.getBoundingClientRect();
   const W = r.width, H = r.height;
-  const life = 50 + Math.random() * 75;
+  // Concentrate spawn at the base center — narrower at top, wider at base
+  const baseSpread = W * 0.36;
+  const life = 45 + Math.random() * 65;
   fireParticles.push({
-    x:       W * 0.5 + (Math.random() - 0.5) * W * 0.42,
-    y:       H * 0.9 + (scatter ? (Math.random() - 0.5) * H * 0.28 : 0),
-    vx:      (Math.random() - 0.5) * 0.55,
-    vy:      -(0.65 + Math.random() * 1.35) * (0.55 + S.fireIntensity * 0.55),
+    x:       W * 0.5 + (Math.random() - 0.5) * baseSpread,
+    y:       H * 0.92 + (scatter ? (Math.random() - 0.5) * H * 0.15 : 0),
+    vx:      (Math.random() - 0.5) * 0.45,
+    vy:      -(0.7 + Math.random() * 1.55) * (0.6 + S.fireIntensity * 0.5),
     life:    scatter ? Math.random() * life : 0,
     lifeMax: life,
-    size:    2.5 + Math.random() * 5,
-    hue:     14 + Math.random() * 24,
+    size:    3.0 + Math.random() * 5.5,
+    hue:     10 + Math.random() * 28,
+    wave:    Math.random() * Math.PI * 2,  // phase offset for lateral sway
   });
 }
 
@@ -1323,36 +1367,79 @@ function renderFireLoop() {
   if (!canvas || !fireCtx) return;
   const r = canvas.getBoundingClientRect();
   const W = r.width, H = r.height;
-  fireCtx.clearRect(0, 0, W, H);
 
-  const rate = 1 + Math.floor(S.fireIntensity * 3.5);
+  // Semi-transparent clear for motion blur / trailing effect
+  fireCtx.globalCompositeOperation = 'source-over';
+  fireCtx.fillStyle = 'rgba(0,0,0,0.18)';
+  fireCtx.fillRect(0, 0, W, H);
+
+  // Clip all drawing strictly within canvas
+  fireCtx.save();
+  fireCtx.beginPath();
+  fireCtx.rect(0, 0, W, H);
+  fireCtx.clip();
+
+  const rate = 1 + Math.floor(S.fireIntensity * 4);
   for (let i = 0; i < rate; i++) spawnFire(false);
+
+  fireCtx.globalCompositeOperation = 'lighter';
 
   for (let i = fireParticles.length - 1; i >= 0; i--) {
     const p = fireParticles[i];
     p.life++;
     if (p.life >= p.lifeMax) { fireParticles.splice(i, 1); continue; }
+
+    // Kill particles that escape the canvas top
+    if (p.y < -p.size * 3) { fireParticles.splice(i, 1); continue; }
+
     const prog = p.life / p.lifeMax;
-    p.x += p.vx + Math.sin(p.life * 0.18) * 0.38;
+    // Realistic turbulence: narrow lick upward, sway side to side
+    const sway = Math.sin(p.life * 0.22 + p.wave) * 0.55 + Math.sin(p.life * 0.07) * 0.28;
+    p.x += p.vx + sway;
     p.y += p.vy;
-    p.vy *= 0.993; p.vx *= 0.98;
+    p.vy *= 0.991;
+    p.vx *= 0.975;
 
-    let a, h, s, b;
-    if (prog < 0.12)       { h=45; s=80; b=94; a=prog/0.12; }
-    else if (prog < 0.5)   { h=p.hue+20; s=95; b=65; a=0.82; }
-    else if (prog < 0.82)  { h=p.hue; s=88; b=40; a=0.82-(prog-0.5)*0.62; }
-    else                   { h=p.hue-8; s=70; b=28; a=Math.max(0,1-(prog-0.82)/0.18)*0.28; }
+    // Color: bright white-yellow core → orange → deep red → transparent
+    let a, h, s, l;
+    if (prog < 0.08)      { h=50; s=95; l=96; a=prog/0.08; }        // white-yellow ignition
+    else if (prog < 0.28) { h=38; s=98; l=72; a=0.90; }              // bright yellow-orange
+    else if (prog < 0.56) { h=p.hue+8; s=95; l=52; a=0.80; }        // orange
+    else if (prog < 0.80) { h=p.hue-2; s=85; l=32; a=0.80-(prog-0.56)*1.8; } // deep red
+    else                  { h=p.hue-12; s=60; l=18; a=Math.max(0,(1-prog)/0.2)*0.18; } // dark smoke
 
-    const rad = p.size * (1 - prog * 0.5);
-    const g = fireCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad * 2.5);
-    g.addColorStop(0,   `hsla(${h},${s}%,${b}%,${a})`);
-    g.addColorStop(0.5, `hsla(${h-10},${s-10}%,${b-12}%,${a*0.55})`);
-    g.addColorStop(1,   `hsla(${h-20},${s}%,${b-20}%,0)`);
+    const rad = p.size * (1 - prog * 0.45);
+    if (rad < 0.5 || a < 0.01) continue;
+
+    const grd = fireCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad * 2.8);
+    grd.addColorStop(0,   `hsla(${h},${s}%,${l}%,${a})`);
+    grd.addColorStop(0.4, `hsla(${h-8},${s-5}%,${l-15}%,${a * 0.65})`);
+    grd.addColorStop(1,   `hsla(${h-18},${s}%,${l-22}%,0)`);
     fireCtx.beginPath();
-    fireCtx.arc(p.x, p.y, rad * 2.5, 0, Math.PI * 2);
-    fireCtx.fillStyle = g;
+    fireCtx.arc(p.x, p.y, rad * 2.8, 0, Math.PI * 2);
+    fireCtx.fillStyle = grd;
     fireCtx.fill();
   }
+
+  fireCtx.globalCompositeOperation = 'source-over';
+  fireCtx.restore();
+
+  // Draw glowing embers at the base
+  const emberCount = Math.floor(3 + S.fireIntensity * 5);
+  for (let e = 0; e < emberCount; e++) {
+    const ex = W * 0.5 + (Math.random() - 0.5) * W * 0.5;
+    const ey = H * 0.88 + Math.random() * H * 0.1;
+    const er = 1.0 + Math.random() * 2.2;
+    const eg = fireCtx.createRadialGradient(ex, ey, 0, ex, ey, er * 3);
+    eg.addColorStop(0,   'rgba(255,220,100,0.65)');
+    eg.addColorStop(0.5, 'rgba(220,100,20,0.35)');
+    eg.addColorStop(1,   'rgba(0,0,0,0)');
+    fireCtx.beginPath();
+    fireCtx.arc(ex, ey, er * 3, 0, Math.PI * 2);
+    fireCtx.fillStyle = eg;
+    fireCtx.fill();
+  }
+
   fireRafId = requestAnimationFrame(renderFireLoop);
 }
 
@@ -1761,15 +1848,18 @@ function openJournal() {
 }
 
 function saveJournalEntry() {
-  const ctx = ($('j-context').value || '').trim();
+  const ctx   = ($('j-context').value || '').trim();
+  const title = ($('j-entry-title').value || '').trim();
   S.journal.unshift({
     date:   new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }),
+    title:  title,
     potion: S.potionName || '—',
     ings:   [...S.selected],
     ctx:    ctx,
   });
   saveJrn();
   $('j-context').value = '';
+  $('j-entry-title').value = '';
   renderJHistory();
   $('journal-overlay').classList.remove('open');
 }
@@ -1787,6 +1877,7 @@ function renderJHistory() {
     d.className = 'j-entry';
     d.innerHTML = `
       <div class="j-entry-date">${e.date}</div>
+      ${e.title ? `<div class="j-entry-session-title">${e.title}</div>` : ''}
       <div class="j-entry-potion">${e.potion}</div>
       ${e.ings && e.ings.length ? `<div class="j-entry-ings">${e.ings.join(' · ')}</div>` : ''}
       ${e.ctx ? `<div class="j-entry-ctx">${e.ctx}</div>` : ''}
@@ -1853,20 +1944,54 @@ function bellTone(freq, gainVal, dur) {
   osc.start(); osc.stop(ctx.currentTime + dur + 0.05);
 }
 
-function strikeInstrument(type, x, y) {
-  // Ripple regardless of sound
+function playAuthenticBell(x, y) {
   spawnRipple(x, y);
   ensureAudio();
   if (!S.soundOn) return;
-  const t = S.audioCtx.currentTime;
-  if (type === 'bowl') {
-    bellTone(220, 0.32, 9); bellTone(440, 0.16, 7.5);
-    bellTone(660, 0.09, 6); bellTone(880, 0.04, 5);
-  } else if (type === 'koshi') {
-    [523,659,784,1047,1319].forEach((f,i) => setTimeout(() => { ensureAudio(); bellTone(f, 0.14, 5); }, i*130));
-  } else if (type === 'tingsha') {
-    bellTone(1174, 0.42, 4); bellTone(2349, 0.16, 3); bellTone(3136, 0.07, 2);
-  }
+  const ctx = S.audioCtx;
+  const now = ctx.currentTime;
+  // Authentic bell partials — real bells have inharmonic partials
+  // Approximate a medium hand bell: fundamental ~523 Hz (C5)
+  const partials = [
+    { freq: 523,   gain: 0.38, dur: 8.0 },
+    { freq: 1440,  gain: 0.22, dur: 6.0 },
+    { freq: 2790,  gain: 0.14, dur: 4.5 },
+    { freq: 4110,  gain: 0.07, dur: 3.0 },
+    { freq: 5820,  gain: 0.04, dur: 2.0 },
+  ];
+  partials.forEach(({ freq, gain, dur }) => {
+    const osc  = ctx.createOscillator();
+    const g    = ctx.createGain();
+    const filt = ctx.createBiquadFilter();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    filt.type = 'highpass';
+    filt.frequency.value = 80;
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(gain, now + 0.003);
+    g.gain.exponentialRampToValueAtTime(gain * 0.5, now + 0.08);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    osc.connect(filt); filt.connect(g); g.connect(ctx.destination);
+    osc.start(now); osc.stop(now + dur + 0.05);
+  });
+  // Subtle initial strike transient (light click)
+  const transLen = Math.floor(ctx.sampleRate * 0.012);
+  const transBuf = ctx.createBuffer(1, transLen, ctx.sampleRate);
+  const td = transBuf.getChannelData(0);
+  for (let i = 0; i < transLen; i++) td[i] = (Math.random() * 2 - 1) * (1 - i / transLen);
+  const transSrc = ctx.createBufferSource();
+  const transG   = ctx.createGain();
+  const transFlt = ctx.createBiquadFilter();
+  transFlt.type = 'bandpass'; transFlt.frequency.value = 4000; transFlt.Q.value = 0.8;
+  transSrc.buffer = transBuf;
+  transG.gain.setValueAtTime(0.18, now);
+  transG.gain.exponentialRampToValueAtTime(0.0001, now + 0.012);
+  transSrc.connect(transFlt); transFlt.connect(transG); transG.connect(ctx.destination);
+  transSrc.start(now);
+}
+
+function strikeInstrument(type, x, y) {
+  playAuthenticBell(x, y);
 }
 
 function spawnRipple(x, y) {
@@ -1910,21 +2035,68 @@ function playRevealChord() {
   [523,659,784,1047].forEach((f, i) => setTimeout(() => { ensureAudio(); bellTone(f, 0.2, 5.5); }, i * 200));
 }
 function playCrackle() {
+  // Authentic log-on-log wood knock sound
   ensureAudio();
   const ctx = S.audioCtx;
-  const len = Math.floor(ctx.sampleRate * 0.35);
-  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-  const d   = buf.getChannelData(0);
-  for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * 0.14;
-  const src = ctx.createBufferSource();
-  const g   = ctx.createGain();
-  const flt = ctx.createBiquadFilter();
-  flt.type = 'bandpass'; flt.frequency.value = 700; flt.Q.value = 0.6;
-  src.buffer = buf;
-  g.gain.setValueAtTime(0.45, ctx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
-  src.connect(flt); flt.connect(g); g.connect(ctx.destination);
-  src.start();
+  const now = ctx.currentTime;
+
+  // Layer 1: woody low-frequency thump (body of log impact)
+  const thumpOsc  = ctx.createOscillator();
+  const thumpGain = ctx.createGain();
+  const thumpFlt  = ctx.createBiquadFilter();
+  thumpOsc.type = 'sine';
+  thumpOsc.frequency.setValueAtTime(110, now);
+  thumpOsc.frequency.exponentialRampToValueAtTime(55, now + 0.18);
+  thumpFlt.type = 'lowpass'; thumpFlt.frequency.value = 280;
+  thumpGain.gain.setValueAtTime(0, now);
+  thumpGain.gain.linearRampToValueAtTime(0.65, now + 0.004);
+  thumpGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+  thumpOsc.connect(thumpFlt); thumpFlt.connect(thumpGain); thumpGain.connect(ctx.destination);
+  thumpOsc.start(now); thumpOsc.stop(now + 0.25);
+
+  // Layer 2: mid-range woody knock resonance
+  const knockOsc  = ctx.createOscillator();
+  const knockGain = ctx.createGain();
+  knockOsc.type = 'triangle';
+  knockOsc.frequency.setValueAtTime(320, now);
+  knockOsc.frequency.exponentialRampToValueAtTime(180, now + 0.12);
+  knockGain.gain.setValueAtTime(0, now);
+  knockGain.gain.linearRampToValueAtTime(0.35, now + 0.003);
+  knockGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+  knockOsc.connect(knockGain); knockGain.connect(ctx.destination);
+  knockOsc.start(now); knockOsc.stop(now + 0.20);
+
+  // Layer 3: textured wood grain noise burst
+  const noiseLen = Math.floor(ctx.sampleRate * 0.28);
+  const noiseBuf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
+  const nd = noiseBuf.getChannelData(0);
+  for (let i = 0; i < noiseLen; i++) nd[i] = (Math.random() * 2 - 1);
+  const noiseSrc  = ctx.createBufferSource();
+  const noiseGain = ctx.createGain();
+  const noiseFlt  = ctx.createBiquadFilter();
+  const noiseFlt2 = ctx.createBiquadFilter();
+  noiseFlt.type = 'bandpass'; noiseFlt.frequency.value = 600; noiseFlt.Q.value = 1.8;
+  noiseFlt2.type = 'highpass'; noiseFlt2.frequency.value = 400;
+  noiseSrc.buffer = noiseBuf;
+  noiseGain.gain.setValueAtTime(0.22, now);
+  noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+  noiseSrc.connect(noiseFlt); noiseFlt.connect(noiseFlt2); noiseFlt2.connect(noiseGain); noiseGain.connect(ctx.destination);
+  noiseSrc.start(now);
+
+  // Layer 4: high-frequency splinter/crackle tail
+  const crackLen = Math.floor(ctx.sampleRate * 0.15);
+  const crackBuf = ctx.createBuffer(1, crackLen, ctx.sampleRate);
+  const cd = crackBuf.getChannelData(0);
+  for (let i = 0; i < crackLen; i++) cd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i/crackLen, 2);
+  const crackSrc  = ctx.createBufferSource();
+  const crackGain = ctx.createGain();
+  const crackFlt  = ctx.createBiquadFilter();
+  crackFlt.type = 'highpass'; crackFlt.frequency.value = 1800;
+  crackSrc.buffer = crackBuf;
+  crackGain.gain.setValueAtTime(0.12, now + 0.01);
+  crackGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+  crackSrc.connect(crackFlt); crackFlt.connect(crackGain); crackGain.connect(ctx.destination);
+  crackSrc.start(now + 0.01);
 }
 
 /* ─────────────────────────────────────────────────────────────────
