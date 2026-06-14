@@ -476,6 +476,38 @@ html, body {
 }
 .ghost-btn:hover { border-color: rgba(196,145,90,0.5); color: rgba(223,202,167,0.78); }
 
+@media (max-width: 767px) {
+  .cabin-top-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .cabin-btn-group {
+    justify-content: center;
+  }
+  .ghost-btn {
+    font-size: 0.95rem;
+    white-space: normal;
+  }
+}
+
+/* ── Fullscreen toggle ── */
+#fs-btn {
+  display: none;
+  position: fixed;
+  bottom: 20px; right: 20px;
+  z-index: 100;
+  background: rgba(6,3,2,0.55);
+  border: 1px solid rgba(196,145,90,0.25);
+  color: rgba(223,202,167,0.6);
+  font-size: 1.4rem;
+  width: 40px; height: 40px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+#fs-btn:hover { border-color: var(--amber); color: var(--amber); }
+
 /* ── Scroll trigger (shelf prop) ── */
 #scroll-trigger {
   position: absolute;
@@ -965,9 +997,9 @@ body { animation: appBoot 1.8s ease; }
   </div>
   <div class="trail-controls">
     <div class="duration-selector">
-      <button class="dur-btn" data-sec="30">30 s</button>
-      <button class="dur-btn active" data-sec="60">1 min</button>
-      <button class="dur-btn" data-sec="120">2 min</button>
+      <button type="button" class="dur-btn" data-sec="30">30 s</button>
+      <button type="button" class="dur-btn active" data-sec="60">1 min</button>
+      <button type="button" class="dur-btn" data-sec="120">2 min</button>
     </div>
     <div id="trail-timer"></div>
     <button id="skip-btn">enter the cabin</button>
@@ -984,6 +1016,7 @@ body { animation: appBoot 1.8s ease; }
 
 <!-- SCREEN 3: THE CABIN -->
 <div id="screen-cabin" class="screen">
+  <button id="fs-btn" type="button" title="Toggle fullscreen">⛶</button>
   <div class="cabin-stage">
 
     <!-- Fire -->
@@ -1949,6 +1982,24 @@ window.addEventListener('DOMContentLoaded', () => {
   initBreathing();
   initDoor();
 });
+
+(function() {
+  var fsBtn = document.getElementById('fs-btn');
+  if (!document.documentElement.requestFullscreen) return;
+  fsBtn.style.display = 'block';
+  fsBtn.addEventListener('click', function() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  });
+  document.addEventListener('fullscreenchange', function() {
+    fsBtn.style.color = document.fullscreenElement
+      ? 'var(--amber)'
+      : 'rgba(223,202,167,0.6)';
+  });
+})();
 </script>
 </body>
 </html>
